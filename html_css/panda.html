@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Panda</title>
+
+<style>
+body{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    margin:0;
+    background:#e8f6ff;
+    font-family:Arial;
+}
+
+/* Panda container */
+.panda{
+    position:relative;
+}
+
+/* Ears */
+.ear{
+    width:80px;
+    height:80px;
+    background:black;
+    border-radius:50%;
+    position:absolute;
+    top:-30px;
+    cursor:pointer;
+}
+
+.left-ear{ left:-20px; }
+.right-ear{ right:-20px; }
+
+/* Face */
+.face{
+    width:220px;
+    height:200px;
+    background:white;
+    border-radius:50%;
+    position:relative;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition:0.3s;
+}
+
+/* Eyes */
+.eye{
+    width:45px;
+    height:55px;
+    background:black;
+    border-radius:50%;
+    position:absolute;
+    top:60px;
+}
+
+.eye.left{ left:50px; }
+.eye.right{ right:50px; }
+
+.eye::after{
+    content:"";
+    width:15px;
+    height:15px;
+    background:white;
+    border-radius:50%;
+    position:absolute;
+    top:12px;
+    left:12px;
+}
+
+/* Nose */
+.nose{
+    width:30px;
+    height:20px;
+    background:black;
+    border-radius:50%;
+    position:absolute;
+    bottom:60px;
+}
+
+/* Message */
+.message{
+    margin-top:20px;
+    font-size:20px;
+    color:#333;
+    opacity:0;
+    transition:0.3s;
+}
+
+/* Button */
+button{
+    margin-top:15px;
+    padding:10px 20px;
+    border:none;
+    background:black;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="panda" id="panda">
+    <div class="ear left-ear" onclick="changeFace()"></div>
+    <div class="ear right-ear"
+         onmouseover="showText()"
+         onmouseout="hideText()"></div>
+
+    <div class="face" id="face">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="nose"></div>
+    </div>
+</div>
+
+<div class="message" id="msg">
+    Let's do coding!
+</div>
+
+<button onclick="vanish()">Vanish Panda</button>
+
+<script>
+let colors = ["white","#ffe4e1","#e0ffe0","#fff0b3","#e6e6ff"];
+let index = 0;
+
+function changeFace(){
+    index = (index + 1) % colors.length;
+    document.getElementById("face").style.background = colors[index];
+}
+
+function showText(){
+    document.getElementById("msg").style.opacity = 1;
+}
+
+function hideText(){
+    document.getElementById("msg").style.opacity = 0;
+}
+
+function vanish(){
+    document.getElementById("panda").style.display = "none";
+    document.getElementById("msg").style.display = "none";
+}
+</script>
+
+</body>
+</html>

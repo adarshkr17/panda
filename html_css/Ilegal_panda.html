@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Splash Panda</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #e8f6ff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Panda Container */
+        .panda {
+            position: relative;
+            width: 220px;
+            height: 200px;
+            transition: transform 0.2s;
+        }
+
+        /* Animation for shaking */
+        @keyframes shake {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        .shaking {
+            animation: shake 0.3s ease-in-out;
+        }
+
+        /* Ears */
+        .ear {
+            width: 80px;
+            height: 80px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: -30px;
+            cursor: pointer;
+            z-index: 1;
+        }
+        .left-ear { left: -20px; }
+        .right-ear { right: -20px; }
+
+        /* Face */
+        .face {
+            width: 220px;
+            height: 200px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: background 0.5s;
+            border: 2px solid #eee;
+            z-index: 2;
+        }
+
+        /* Eyes */
+        .eye {
+            width: 45px;
+            height: 55px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 60px;
+        }
+        .eye.left { left: 50px; }
+        .eye.right { right: 50px; }
+
+        .eye::after {
+            content: "";
+            width: 15px;
+            height: 15px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 12px;
+            left: 12px;
+        }
+
+        /* Nose */
+        .nose {
+            width: 30px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 60px;
+        }
+
+        /* Water Droplet Style */
+        .drop {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: #3498db;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        /* UI Controls */
+        .controls {
+            margin-top: 40px;
+            display: flex;
+            gap: 15px;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            background: #2c3e50;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: 0.2s;
+        }
+
+        button:hover {
+            background: #34495e;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn {
+            background: #95a5a6;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="panda" id="panda">
+        <div class="ear left-ear" onclick="changeColor()"></div>
+        <div class="ear right-ear"></div>
+
+        <div class="face" id="face">
+            <div class="eye left"></div>
+            <div class="eye right"></div>
+            <div class="nose"></div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button onclick="splash()">Splash Water!</button>
+        <button class="reset-btn" onclick="resetPanda()">Dry Off</button>
+    </div>
+
+    <script>
+        function splash() {
+            const panda = document.getElementById("panda");
+            const face = document.getElementById("face");
+
+            // 1. Make the panda shake
+            panda.classList.add("shaking");
+            setTimeout(() => panda.classList.remove("shaking"), 300);
+
+            // 2. Change face color to "wet"
+            face.style.background = "#d1e9ff";
+
+            // 3. Create the splash effect
+            for (let i = 0; i < 20; i++) {
+                const drop = document.createElement("div");
+                drop.className = "drop";
+                
+                // Start drop at the center of the panda
+                const startX = 110; 
+                const startY = 100;
+                
+                drop.style.left = startX + "px";
+                drop.style.top = startY + "px";
+                
+                document.getElementById("panda").appendChild(drop);
+
+                // Calculate a random explosion direction
+                const angle = Math.random() * Math.PI * 2; // Random 360 degrees
+                const distance = 100 + Math.random() * 150; // Random distance
+                const destX = Math.cos(angle) * distance;
+                const destY = Math.sin(angle) * distance;
+
+                // Animate the drop flying out
+                drop.animate([
+                    { transform: 'translate(0, 0)', opacity: 1 },
+                    { transform: `translate(${destX}px, ${destY}px)`, opacity: 0 }
+                ], {
+                    duration: 600 + Math.random() * 400,
+                    easing: 'ease-out',
+                    fill: 'forwards'
+                });
+
+                // Remove the drop from DOM after animation
+                setTimeout(() => drop.remove(), 1000);
+            }
+        }
+
+        function resetPanda() {
+            document.getElementById("face").style.background = "white";
+        }
+
+        function changeColor() {
+            const colors = ["#ffe4e1", "#e0ffe0", "#fff0b3", "#e6e6ff"];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById("face").style.background = randomColor;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+git --version
+git init
+git add . // dot means all files in the current directory or dot means add the files
+
+
